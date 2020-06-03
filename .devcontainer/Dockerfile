@@ -39,6 +39,13 @@ RUN apt-get update \
     && rm -f /tmp/apache-maven.tar.gz \
     && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn \
     #
+    # Install Azure Functions Core Tools
+    && curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+    && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
+    && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/debian/$(lsb_release -rs | cut -d'.' -f 1)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list' \
+    && apt-get -y update \
+    && apt-get -y install azure-functions-core-tools \
+    #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
